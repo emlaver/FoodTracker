@@ -41,7 +41,7 @@ class RatingControl: UIView {
       let button = UIButton()
 
       //button.backgroundColor = UIColor.redColor()
-      button.setImage(emptyStarImage, for: UIControlState())
+      button.setImage(emptyStarImage, for: UIControl.State())
       button.setImage(filledStarImage, for: .selected)
       button.setImage(filledStarImage, for: [.highlighted, .selected])
 
@@ -76,7 +76,7 @@ class RatingControl: UIView {
   // MARK: Button Action
 
   @objc func ratingButtonTapped(_ button: UIButton) {
-    rating = ratingButtons.index(of: button)! + 1
+    rating = ratingButtons.firstIndex(of: button)! + 1
     print("Button pressed 👍, rating: \(rating)")
 
     updateButtonSelectionStates()

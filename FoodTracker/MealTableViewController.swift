@@ -5,7 +5,7 @@
 //  Created by Mario Ban on 24.04.16.
 //  Copyright © 2016 Mario Ban. All rights reserved.
 //
-
+import SwiftCloudant
 import UIKit
 
 class MealTableViewController: UITableViewController {
@@ -44,8 +44,23 @@ class MealTableViewController: UITableViewController {
   }
 
   func loadSampleMeals() {
+    // Use Cloudant db to load meals
+    // Create a CouchDBClient
+    let cloudantURL = NSURL(string:"https://exapmples.cloudant.com")!
+    let client = CouchDBClient(url:cloudantURL as URL, username:"username", password:"password")
+    let dbName = "animaldb"
+    
+    let badgerDoc = GetDocumentOperation(id: "doc1", databaseName: dbName) { (response, httpInfo, error) in
+        if let error = error {
+            print("Encountered an error while reading a document. Error:\(error)")
+        } else {
+            //print("Read document: \(response)")
+        }
+    }
+    client.add(operation:read as! CouchOperation)
+    
     let photo1 = UIImage(named: "meal1")!
-    let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4)!
+    let meal1 = Meal(name: badgerDoc.id, photo: photo1, rating: 4)!
 
     let photo2 = UIImage(named: "meal2")!
     let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5)!
@@ -97,7 +112,7 @@ class MealTableViewController: UITableViewController {
   }
 
   // Override to support editing the table view.
-  override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+  override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     print("at: \(indexPath.row)") // Debug
     if editingStyle == .delete {
       // Delete the row from the data source
